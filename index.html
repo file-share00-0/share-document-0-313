@@ -2,251 +2,293 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Secure File Transfer</title>
+  <title>Shared Document</title>
 
   <style>
     :root {
-      --text: #202124;
-      --muted: #737780;
-      --border: #e5e7eb;
-      --surface: #ffffff;
-      --page: #f7f8fa;
-      --accent: #1b1b1b;
-      --accent-hover: #363636;
+      --primary: #173b68;
+      --primary-hover: #102d50;
+      --text: #202b3c;
+      --muted: #697586;
+      --border: #e2e7ee;
+      --background: #f5f7fa;
+      --white: #ffffff;
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      background: var(--page);
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--background);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont,
-        "Segoe UI", Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      font-size: 14px;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    /* Main content */
 
     .main {
-      width: min(800px, calc(100% - 40px));
+      width: 100%;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 76px 0 100px;
+      padding: 66px 24px 50px;
     }
 
-    .page-heading {
-      margin-bottom: 32px;
+    .intro {
+      margin-bottom: 30px;
     }
 
-    .breadcrumb {
-      margin-bottom: 19px;
-      color: #737780;
-      font-size: 12px;
-      letter-spacing: 0.1px;
-    }
-
-    .breadcrumb span {
-      margin: 0 8px;
-      color: #b2b5bb;
-    }
-
-    h1 {
-      margin: 0;
+    .intro h1 {
       font-size: 30px;
-      line-height: 1.25;
-      font-weight: 620;
-      letter-spacing: -1px;
+      font-weight: 600;
+      letter-spacing: -0.8px;
+      margin-bottom: 11px;
     }
 
-    .description {
-      margin: 11px 0 0;
-      color: var(--muted);
-      font-size: 14px;
+    .intro p {
+      font-size: 15px;
       line-height: 1.7;
+      color: var(--muted);
+      max-width: 600px;
     }
 
-    .file-panel {
-      overflow: hidden;
-      background: var(--surface);
-      border: 1px solid #e1e3e7;
+    /* Document panel */
+
+    .document-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
       border-radius: 12px;
-      box-shadow: 0 2px 5px rgba(20, 25, 35, 0.025);
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(22, 42, 68, 0.035);
     }
 
     .panel-heading {
-      padding: 21px 26px;
+      padding: 20px 26px;
       border-bottom: 1px solid var(--border);
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.05px;
-    }
-
-    .file-content {
-      padding: 28px 26px 25px;
-    }
-
-    .file-row {
       display: flex;
       align-items: center;
-      gap: 18px;
+      justify-content: space-between;
+      gap: 15px;
     }
 
-    .file-symbol {
-      width: 52px;
-      height: 58px;
-      flex-shrink: 0;
+    .panel-heading h2 {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .availability {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: #327354;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: #389568;
+      border-radius: 50%;
+    }
+
+    .file-details {
+      padding: 30px 26px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .file-icon {
+      width: 64px;
+      height: 72px;
+      border: 1px solid #dbe5f2;
+      background: #f0f5fc;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid #e2e4e8;
-      border-radius: 8px;
-      background: #fafbfc;
+      flex-shrink: 0;
     }
 
-    .file-symbol svg {
-      width: 26px;
-      height: 26px;
-      color: #555b65;
+    .file-icon svg {
+      width: 30px;
+      height: 34px;
+      stroke: var(--primary);
+      fill: none;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
-    .file-information {
+    .file-info {
       flex: 1;
       min-width: 0;
     }
 
-    .file-name {
-      margin: 0;
-      overflow-wrap: anywhere;
-      font-size: 16px;
-      line-height: 1.5;
+    .file-info h3 {
+      font-size: 17px;
       font-weight: 600;
-      letter-spacing: -0.25px;
+      overflow-wrap: anywhere;
+      margin-bottom: 9px;
     }
 
-    .file-description {
-      margin-top: 6px;
+    .file-meta {
       display: flex;
-      align-items: center;
       flex-wrap: wrap;
-      gap: 9px;
-      color: #777b83;
-      font-size: 12px;
-    }
-
-    .file-badge {
-      padding: 4px 6px;
-      border: 1px solid #e5e7eb;
-      border-radius: 4px;
-      color: #555b65;
-      font-size: 10px;
-      font-weight: 650;
-      letter-spacing: 0.5px;
-    }
-
-    .panel-divider {
-      height: 1px;
-      background: var(--border);
-      margin: 26px 0 22px;
-    }
-
-    .availability {
-      display: flex;
       align-items: center;
       gap: 9px;
-      margin-bottom: 20px;
-      color: #3b7452;
-      font-size: 12px;
-      font-weight: 500;
+      color: var(--muted);
+      font-size: 13px;
     }
 
-    .availability-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #4e9366;
+    .meta-separator {
+      color: #c4cbd5;
+    }
+
+    .file-type {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+      color: #36577f;
+      background: #edf3fa;
+      border-radius: 4px;
+      padding: 5px 7px;
+      margin-top: 12px;
+    }
+
+    /* Download area */
+
+    .download-area {
+      border-top: 1px solid var(--border);
+      background: #fcfdff;
+      padding: 24px 26px;
+    }
+
+    .download-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .download-description h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 7px;
+    }
+
+    .download-description p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--muted);
     }
 
     .download-button {
-      width: 100%;
-      min-height: 48px;
-      display: flex;
-      justify-content: center;
+      display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
-      padding: 13px 20px;
-      border: 1px solid var(--accent);
-      border-radius: 7px;
-      background: var(--accent);
-      color: #fff;
-      font-size: 13px;
+      min-width: 175px;
+      padding: 13px 19px;
+      background: var(--primary);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 14px;
       font-weight: 600;
-      cursor: pointer;
-      transition: background 150ms ease,
-        border-color 150ms ease;
+      border-radius: 7px;
+      transition: background 0.2s ease;
+      white-space: nowrap;
     }
 
     .download-button:hover {
-      background: var(--accent-hover);
-      border-color: var(--accent-hover);
+      background: var(--primary-hover);
     }
 
     .download-button:focus-visible {
-      outline: 2px solid #555;
+      outline: 3px solid #9ab9e1;
       outline-offset: 3px;
     }
 
     .download-button svg {
       width: 17px;
       height: 17px;
-      flex-shrink: 0;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
-    .download-note {
-      margin: 14px 0 0;
-      color: #81858d;
+    /* Information message */
+
+    .information {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 20px 0 0;
+      color: var(--muted);
       font-size: 12px;
-      line-height: 1.6;
-      text-align: center;
+      line-height: 1.7;
     }
+
+    .information svg {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      stroke: #73839a;
+      fill: none;
+      stroke-width: 1.7;
+    }
+
+    /* Responsive layout */
 
     @media (max-width: 600px) {
       .main {
-        width: calc(100% - 32px);
-        padding: 48px 0 65px;
+        padding: 38px 17px 40px;
       }
 
-      h1 {
-        font-size: 26px;
+      .intro h1 {
+        font-size: 25px;
       }
 
       .panel-heading {
         padding: 18px;
       }
 
-      .file-content {
+      .file-details {
+        padding: 24px 18px;
+        gap: 14px;
+      }
+
+      .file-icon {
+        width: 52px;
+        height: 61px;
+      }
+
+      .file-info h3 {
+        font-size: 15px;
+      }
+
+      .download-area {
         padding: 22px 18px;
       }
 
-      .file-row {
-        gap: 13px;
+      .download-content {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 20px;
       }
 
-      .file-symbol {
-        width: 46px;
-        height: 52px;
-      }
-
-      .file-name {
-        font-size: 14px;
+      .download-button {
+        width: 100%;
       }
     }
   </style>
@@ -256,109 +298,91 @@
 
   <main class="main">
 
-    <section class="page-heading">
-      <div class="breadcrumb">
-        Home <span>/</span> Shared files
-      </div>
-
-      <h1>Shared file</h1>
-
-      <p class="description">
-        The following file is available for download.
-        Review the file details below.
+    <section class="intro">
+      <h1>Shared document</h1>
+      <p>
+        The file below has been made available for you.
+        Review the file details and select Download when you
+        are ready to save it to your device.
       </p>
     </section>
 
-    <section class="file-panel">
+    <section class="document-panel">
 
       <div class="panel-heading">
-        File details
-      </div>
-
-      <div class="file-content">
-
-        <div class="file-row">
-
-          <div class="file-symbol">
-            <svg viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5"
-              stroke-linecap="round" stroke-linejoin="round"
-              aria-hidden="true">
-              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
-              <path d="M13 2v7h7"/>
-              <path d="M12 12v6"/>
-              <path d="m9 15 3 3 3-3"/>
-            </svg>
-          </div>
-
-          <div class="file-information">
-
-            <h2 class="file-name" id="filename">
-              Design blueprint.zip
-            </h2>
-
-            <div class="file-description">
-              <span class="file-badge">ZIP</span>
-              <span>Compressed archive</span>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="panel-divider"></div>
+        <h2>File details</h2>
 
         <div class="availability">
-          <span class="availability-dot"></span>
-          <span id="status">Your ZIP download is ready.</span>
+          <span class="status-dot"></span>
+          Available
+        </div>
+      </div>
+
+      <div class="file-details">
+
+        <div class="file-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M13 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10z"/>
+            <path d="M13 3v7h7"/>
+            <path d="M12 13v6"/>
+            <path d="m9 16 3 3 3-3"/>
+          </svg>
         </div>
 
-        <a href="./build.zip"
-          id="download"
-          class="download-button">
+        <div class="file-info">
+          <h3>Design blueprint</h3>
 
-          <svg viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round"
-            aria-hidden="true">
-            <path d="M12 3v12"/>
-            <path d="m7 10 5 5 5-5"/>
-            <path d="M5 19h14"/>
-          </svg>
+          <div class="file-meta">
+            <span>ZIP archive</span>
+            <span class="meta-separator">•</span>
+            <span>Shared file</span>
+          </div>
 
-          Download file
-        </a>
-
-        <p class="download-note">
-          Select Download file to begin the download.
-        </p>
+          <span class="file-type">ZIP ARCHIVE</span>
+        </div>
 
       </div>
+
+      <div class="download-area">
+        <div class="download-content">
+
+          <div class="download-description">
+            <h3>Ready to download</h3>
+            <p>
+              Select the button to download the file
+              to your device.
+            </p>
+          </div>
+
+          <a href="/download" id="download" class="download-button">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3v12"/>
+              <path d="m7 10 5 5 5-5"/>
+              <path d="M5 17v3h14v-3"/>
+            </svg>
+            Download file
+          </a>
+
+        </div>
+      </div>
+
     </section>
 
+    <div class="information">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M12 11v5"/>
+        <path d="M12 8h.01"/>
+      </svg>
+
+      <p>
+        The download will begin when you select the Download
+        button. If you experience any issues accessing the file,
+        please contact us.
+      </p>
+    </div>
+
   </main>
-
-  <script>
-    const downloadButton = document.getElementById("download");
-
-    downloadButton.addEventListener("click", function (event) {
-      event.preventDefault();
-
-      // Generate a random 10-digit number.
-      const randomNumber = crypto.getRandomValues(
-        new Uint32Array(1)
-      )[0] % 9000000000 + 1000000000;
-
-      // Create a temporary download link.
-      const link = document.createElement("a");
-
-      link.href = "./RFQ.zip";
-      link.download = `Design blueprint# ${randomNumber}.zip`;
-
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    });
-  </script>
 <script>
   // Disable right-click
   document.addEventListener('contextmenu', function(e) {
@@ -383,6 +407,5 @@
     }
   });
 </script>
-
 </body>
 </html>
