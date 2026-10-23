@@ -1,0 +1,10 @@
+
+{
+  "archive": "build.zip",
+  "contents": [
+    {
+      "filename": "document.pdf",
+      "type": "application/pdf"
+    }
+  ]
+}

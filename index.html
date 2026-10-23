@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shared Document</title>
+
+<style>
+:root {
+--primary: #173b68;
+--primary-hover: #102d50;
+--text: #202b3c;
+--muted: #697586;
+--border: #e2e7ee;
+--background: #f5f7fa;
+--white: #ffffff;
+}
+
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+body {
+min-height: 100vh;
+font-family: Arial, Helvetica, sans-serif;
+background: var(--background);
+color: var(--text);
+}
+
+/* Main content */
+
+.main {
+width: 100%;
+max-width: 900px;
+margin: 0 auto;
+padding: 66px 24px 50px;
+}
+
+.intro {
+margin-bottom: 30px;
+}
+
+.intro h1 {
+font-size: 30px;
+font-weight: 600;
+letter-spacing: -0.8px;
+margin-bottom: 11px;
+}
+
+.intro p {
+font-size: 15px;
+line-height: 1.7;
+color: var(--muted);
+max-width: 600px;
+}
+
+/* Document panel */
+
+.document-panel {
+background: var(--white);
+border: 1px solid var(--border);
+border-radius: 12px;
+overflow: hidden;
+box-shadow: 0 4px 18px rgba(22, 42, 68, 0.035);
+}
+
+.panel-heading {
+padding: 20px 26px;
+border-bottom: 1px solid var(--border);
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 15px;
+}
+
+.panel-heading h2 {
+font-size: 15px;
+font-weight: 600;
+}
+
+.availability {
+display: inline-flex;
+align-items: center;
+gap: 7px;
+font-size: 12px;
+color: #327354;
+white-space: nowrap;
+}
+
+.status-dot {
+width: 7px;
+height: 7px;
+background: #389568;
+border-radius: 50%;
+}
+
+.file-details {
+padding: 30px 26px;
+display: flex;
+align-items: center;
+gap: 20px;
+}
+
+.file-icon {
+width: 64px;
+height: 72px;
+border: 1px solid #dbe5f2;
+background: #f0f5fc;
+border-radius: 8px;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+}
+
+.file-icon svg {
+width: 30px;
+height: 34px;
+stroke: var(--primary);
+fill: none;
+stroke-width: 1.7;
+stroke-linecap: round;
+stroke-linejoin: round;
+}
+
+.file-info {
+flex: 1;
+min-width: 0;
+}
+
+/* Filename and extraction code */
+
+.file-heading-row {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 16px;
+margin-bottom: 9px;
+}
+
+.file-info h3 {
+font-size: 17px;
+font-weight: 600;
+overflow-wrap: anywhere;
+margin-bottom: 9px;
+}
+
+.file-heading-row h3 {
+min-width: 0;
+margin-bottom: 0;
+}
+
+.extraction-code {
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+gap: 8px;
+flex-shrink: 0;
+}
+
+.extraction-message {
+max-width: 330px;
+font-size: 12px;
+line-height: 1.5;
+color: var(--muted);
+text-align: right;
+}
+
+.extraction-code-row {
+display: inline-flex;
+align-items: center;
+gap: 9px;
+}
+
+.extraction-code strong {
+font-size: 17px;
+font-weight: 700;
+letter-spacing: 1.5px;
+color: #202124;
+font-variant-numeric: tabular-nums;
+}
+
+.copy-code-button {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 5px;
+padding: 7px 10px;
+border: 1px solid #dadce0;
+border-radius: 18px;
+background: #ffffff;
+color: #3c4043;
+font-family: Arial, Helvetica, sans-serif;
+font-size: 12px;
+font-weight: 600;
+cursor: pointer;
+white-space: nowrap;
+transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.copy-code-button:hover {
+background: #f1f3f4;
+border-color: #c5c9ce;
+}
+
+.copy-code-button:focus-visible {
+outline: 2px solid #4285f4;
+outline-offset: 2px;
+}
+
+.copy-code-button svg {
+width: 15px;
+height: 15px;
+stroke: currentColor;
+fill: none;
+stroke-width: 1.8;
+stroke-linecap: round;
+stroke-linejoin: round;
+}
+
+.file-meta {
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+gap: 9px;
+color: var(--muted);
+font-size: 13px;
+}
+
+.meta-separator {
+color: #c4cbd5;
+}
+
+.file-type {
+display: inline-block;
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 0.7px;
+color: #36577f;
+background: #edf3fa;
+border-radius: 4px;
+padding: 5px 7px;
+margin-top: 12px;
+}
+
+/* Download area */
+
+.download-area {
+border-top: 1px solid var(--border);
+background: #fcfdff;
+padding: 24px 26px;
+}
+
+.download-content {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 22px;
+}
+
+.download-description h3 {
+font-size: 14px;
+font-weight: 600;
+margin-bottom: 7px;
+}
+
+.download-description p {
+font-size: 13px;
+line-height: 1.6;
+color: var(--muted);
+}
+
+.download-button {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+min-width: 175px;
+padding: 13px 19px;
+background: var(--primary);
+color: #ffffff;
+text-decoration: none;
+font-size: 14px;
+font-weight: 600;
+border-radius: 7px;
+transition: background 0.2s ease;
+white-space: nowrap;
+}
+
+.download-button:hover {
+background: var(--primary-hover);
+}
+
+.download-button:focus-visible {
+outline: 3px solid #9ab9e1;
+outline-offset: 3px;
+}
+
+.download-button svg {
+width: 17px;
+height: 17px;
+stroke: currentColor;
+fill: none;
+stroke-width: 1.8;
+stroke-linecap: round;
+stroke-linejoin: round;
+}
+
+/* Information message */
+
+.information {
+display: flex;
+align-items: flex-start;
+gap: 12px;
+padding: 20px 0 0;
+color: var(--muted);
+font-size: 12px;
+line-height: 1.7;
+}
+
+.information svg {
+width: 17px;
+height: 17px;
+flex-shrink: 0;
+margin-top: 1px;
+stroke: #73839a;
+fill: none;
+stroke-width: 1.7;
+}
+
+/* Responsive layout */
+
+@media (max-width: 600px) {
+.main {
+padding: 38px 17px 40px;
+}
+
+.intro h1 {
+font-size: 25px;
+}
+
+.panel-heading {
+padding: 18px;
+}
+
+.file-details {
+padding: 24px 18px;
+gap: 14px;
+}
+
+.file-icon {
+width: 52px;
+height: 61px;
+}
+
+.file-info h3 {
+font-size: 15px;
+}
+
+.file-heading-row {
+align-items: flex-start;
+flex-wrap: wrap;
+gap: 12px;
+}
+
+.extraction-code {
+align-items: flex-start;
+width: 100%;
+}
+
+.extraction-message {
+max-width: 100%;
+text-align: left;
+}
+
+.extraction-code-row {
+flex-wrap: wrap;
+}
+
+.extraction-code strong {
+font-size: 16px;
+}
+
+.download-area {
+padding: 22px 18px;
+}
+
+.download-content {
+align-items: stretch;
+flex-direction: column;
+gap: 20px;
+}
+
+.download-button {
+width: 100%;
+}
+}
+</style>
+
+</head>
+
+<body>
+
+<main class="main">
+
+<section class="intro">
+  <h1>Shared document</h1>
+  <p>
+    The file below has been made available for you.
+    Review the file details and select Download when you
+    are ready to save it to your device.
+  </p>
+</section>
+
+<section class="document-panel">
+
+  <div class="panel-heading">
+    <h2>File details</h2>
+
+    <div class="availability">
+      <span class="status-dot"></span>
+      Available
+    </div>
+  </div>
+
+  <div class="file-details">
+
+    <div class="file-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M13 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10z"/>
+        <path d="M13 3v7h7"/>
+        <path d="M12 13v6"/>
+        <path d="m9 16 3 3 3-3"/>
+      </svg>
+    </div>
+
+    <div class="file-info">
+
+      <div class="file-heading-row">
+        <h3>Design Blueprint</h3>
+
+        <div class="extraction-code">
+          <p class="extraction-message">
+            This ZIP file is password-protected. Enter the extraction code below when prompted to extract the files.
+          </p>
+
+          <div class="extraction-code-row">
+            <strong id="zipCode">909290</strong>
+
+            <button
+              type="button"
+              class="copy-code-button"
+              id="copyCodeButton"
+              aria-label="Copy ZIP extraction code"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="8" y="8" width="12" height="12" rx="2"/>
+                <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>
+              </svg>
+              <span id="copyCodeLabel">Copy</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="file-meta">
+        <span>ZIP archive</span>
+        <span class="meta-separator">•</span>
+        <span>Shared file</span>
+      </div>
+
+      <span class="file-type">ZIP ARCHIVE</span>
+    </div>
+
+  </div>
+
+  <div class="download-area">
+    <div class="download-content">
+
+      <div class="download-description">
+        <h3>Ready to download</h3>
+        <p>
+          Select the button to download the file
+          to your device.
+        </p>
+      </div>
+
+      <a href="/download" id="download" class="download-button">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3v12"/>
+          <path d="m7 10 5 5 5-5"/>
+          <path d="M5 17v3h14v-3"/>
+        </svg>
+        Download file
+      </a>
+
+    </div>
+  </div>
+
+</section>
+
+<div class="information">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M12 11v5"/>
+    <path d="M12 8h.01"/>
+  </svg>
+
+  <p>
+    The download will begin when you select the Download
+    button. If you experience any issues accessing the file,
+    please contact us.
+  </p>
+</div>
+
+
+</main>
+
+<script>
+// Copy ZIP extraction code
+const copyCodeButton = document.getElementById('copyCodeButton');
+const zipCode = document.getElementById('zipCode');
+const copyCodeLabel = document.getElementById('copyCodeLabel');
+
+copyCodeButton.addEventListener('click', async function () {
+const code = zipCode.textContent.trim();
+
+try {
+await navigator.clipboard.writeText(code);
+} catch (error) {
+const temporaryInput = document.createElement('textarea');
+temporaryInput.value = code;
+temporaryInput.style.position = 'fixed';
+temporaryInput.style.opacity = '0';
+document.body.appendChild(temporaryInput);
+temporaryInput.select();
+
+const copied = document.execCommand('copy');
+temporaryInput.remove();
+
+if (!copied) {
+copyCodeLabel.textContent = 'Select code';
+return;
+}
+}
+
+copyCodeLabel.textContent = 'Copied';
+
+setTimeout(function () {
+copyCodeLabel.textContent = 'Copy';
+}, 1800);
+});
+
+// Disable right-click
+document.addEventListener('contextmenu', function(e) {
+e.preventDefault();
+});
+
+// Disable common dev shortcuts
+document.addEventListener('keydown', function(e) {
+// F12
+if (e.key === "F12") {
+e.preventDefault();
+}
+
+// Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+C
+if (e.ctrlKey && e.shiftKey &&
+['I','J','C'].includes(e.key.toUpperCase())) {
+e.preventDefault();
+}
+
+// Ctrl+U (view source)
+if (e.ctrlKey && e.key.toUpperCase() === 'U') {
+e.preventDefault();
+}
+});
+</script>
+
+</body>
+</html>
